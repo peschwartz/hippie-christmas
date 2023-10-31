@@ -12,7 +12,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class Categories extends AppCompatActivity {
-    ArrayList<Category> categoryList = new ArrayList<>();
+    ArrayList<Items> itemList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,12 +20,12 @@ public class Categories extends AppCompatActivity {
 
         // list all of the different categories to choose from
         // initialize the "notes" class variable using readNotes in the DBHelper class. Use the username from SharedPreferences as a parameter
-        // read categroies from the db = dbHelper.readNotes(userName);
+        // read categories from the db = dbHelper.readItems();
 
         ArrayList<String> displayCategories = new ArrayList<>();
 
-        for (Category category: categoryList ){
-            displayCategories.add(String.format(category.getName()));
+        for (Items items: itemList){
+            displayCategories.add(items.getCategory());
         }
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayCategories);
