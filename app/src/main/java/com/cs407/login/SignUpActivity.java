@@ -8,6 +8,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cs407.hippie_christmas.R;
+
 public class SignUpActivity extends AppCompatActivity {
 
     EditText editTextNewUsername, editTextEmail, editTextNewPassword;

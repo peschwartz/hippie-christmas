@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.cs407.hippie_christmas.R;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextUsername, editTextPassword;
