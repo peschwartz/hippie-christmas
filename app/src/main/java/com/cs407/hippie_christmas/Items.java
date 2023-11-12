@@ -7,12 +7,15 @@ public class Items {
     private String category;
     private String title;
     private String content;
+    private String location;
 
-    public Items(String category, String title, String content) {
+
+    public Items(String category, String title, String content, String location) {
 
         this.category = category;
         this.title = title;
         this.content = content;
+        this.location = location;
     }
 
     public String getCategory() {
@@ -24,4 +27,5 @@ public class Items {
     public String getContent() {
         return content;
     }
+    public String getLocation() { return location; }
 }
