@@ -1,17 +1,23 @@
 package com.cs407.hippie_christmas;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 
-public class Categories extends AppCompatActivity {
+public class Categories extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener{
+
+    BottomNavigationView bottomNavigationView;
     ArrayList<Items> itemList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,5 +47,34 @@ public class Categories extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(this);
+        bottomNavigationView.setSelectedItemId(R.id.categories);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        Intent intent;
+//
+//        int itemId = item.getItemId();
+//        if (itemId == R.id.home) {
+//            intent = new Intent(Categories.this, home_page.class);
+//            startActivity(intent);
+//            finish();
+//            return true;
+//        } else if (itemId == R.id.categories) {
+//            intent = new Intent(Categories.this, Categories.class);
+//            startActivity(intent);
+//            finish();
+//            return true;
+//        } else if (itemId == R.id.post) {
+//            intent = new Intent(Categories.this, new_post.class);
+//            startActivity(intent);
+//            finish();
+//            return true;
+//        }
+        return false;
+
     }
 }
