@@ -9,11 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextUsername, editTextPassword;
-    DatabaseHelper databaseHelper; // Ensure you have a DatabaseHelper class for SQLite operations
-
+    DatabaseHelper databaseHelper; // Ensure you have a DatabaseHelper class for SQLite
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

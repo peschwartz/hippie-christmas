@@ -29,6 +29,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".new_post">
+        </activity>
+        <activity android:name=".Categories">
+        </activity>
+        <activity android:name=".Results">
+        </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB6DTHMwfC_pUbVIiW_QoRVUQdzIt7Nej4"/>
