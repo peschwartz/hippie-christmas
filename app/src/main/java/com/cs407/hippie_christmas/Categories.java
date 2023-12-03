@@ -30,7 +30,7 @@ public class Categories extends AppCompatActivity {
 
         ArrayList<String> displayCategories = new ArrayList<>();
 
-        for (Items items: itemList){
+        for (Items items : itemList) {
             displayCategories.add(items.getCategory());
         }
 
@@ -67,4 +67,6 @@ public class Categories extends AppCompatActivity {
             return false;
         });
     }
+
+
 }
