@@ -1,6 +1,5 @@
 package com.cs407.hippie_christmas;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +10,8 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 public class new_post extends AppCompatActivity {
     String title, location, condition;
-    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,26 +44,7 @@ public class new_post extends AppCompatActivity {
             }
         });
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.setOnItemSelectedListener((item) -> {
-            int id = item.getItemId();
-            if(id == R.id.home){
-                Intent intent1 = new Intent(new_post.this, home_page.class);
-                startActivity(intent1);
-                return true;
-            } else if (id == R.id.categories) {
-                Intent intent2 = new Intent(new_post.this, Categories.class);
-                startActivity(intent2);
-                return true;
-            } else if (id == R.id.post){
-                Intent intent3 = new Intent(new_post.this, new_post.class);
-                startActivity(intent3);
-                return true;
-            }
-
-            return false;
-        });
 
     }
 }
