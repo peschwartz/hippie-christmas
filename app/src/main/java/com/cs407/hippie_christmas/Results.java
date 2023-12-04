@@ -9,11 +9,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 
 public class Results extends AppCompatActivity {
 
     ArrayList<Items> itemList = new ArrayList<>();
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,27 @@ public class Results extends AppCompatActivity {
                 intent.putExtra("category", i);
                 startActivity(intent);
             }
+        });
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.categories);
+        bottomNavigationView.setOnItemSelectedListener((item) -> {
+            int id = item.getItemId();
+            if(id == R.id.home){
+                Intent intent1 = new Intent(Results.this, home_page.class);
+                startActivity(intent1);
+                return true;
+            } else if (id == R.id.categories) {
+                Intent intent2 = new Intent(Results.this, Categories.class);
+                startActivity(intent2);
+                return true;
+            } else if (id == R.id.post){
+                Intent intent3 = new Intent(Results.this, new_post.class);
+                startActivity(intent3);
+                return true;
+            }
+
+            return false;
         });
     }
 }

@@ -9,10 +9,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 
 public class Categories extends AppCompatActivity {
     ArrayList<Items> itemList = new ArrayList<>();
+    BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,27 @@ public class Categories extends AppCompatActivity {
                 intent.putExtra("category", i);
                 startActivity(intent);
             }
+        });
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.categories);
+        bottomNavigationView.setOnItemSelectedListener((item) -> {
+            int id = item.getItemId();
+            if(id == R.id.home){
+                Intent intent1 = new Intent(Categories.this, home_page.class);
+                startActivity(intent1);
+                return true;
+            } else if (id == R.id.categories) {
+                Intent intent2 = new Intent(Categories.this, Categories.class);
+                startActivity(intent2);
+                return true;
+            } else if (id == R.id.post){
+                Intent intent3 = new Intent(Categories.this, new_post.class);
+                startActivity(intent3);
+                return true;
+            }
+
+            return false;
         });
     }
 }
