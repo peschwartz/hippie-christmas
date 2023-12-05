@@ -9,11 +9,18 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class new_post extends AppCompatActivity {
+public class new_post extends AppCompatActivity implements OnMapReadyCallback {
     String title, location, condition;
     BottomNavigationView bottomNavigationView;
 
@@ -35,10 +42,14 @@ public class new_post extends AppCompatActivity {
 
 
         //TODO: implement a map view with a default location of the user's current location
+        MapView mapView = findViewById(R.id.mapView);
+        mapView.getMapAsync(this);
+
+        // Item Category Selector todo: refactor to reflect this
         mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String condition = parent.getItemAtPosition(position).toString();
+                condition = parent.getItemAtPosition(position).toString();
                 // Handle the selected item
             }
 
@@ -48,6 +59,8 @@ public class new_post extends AppCompatActivity {
             }
         });
 
+
+        // Bottom Navigation View Boilerplate
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.post);
         bottomNavigationView.setOnItemSelectedListener((item) -> {
@@ -68,6 +81,14 @@ public class new_post extends AppCompatActivity {
 
             return false;
         });
+
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+        LatLng loc = new LatLng(43.072, 89.4098);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
 
     }
 }
