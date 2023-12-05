@@ -2,17 +2,17 @@ package com.cs407.hippie_christmas;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -21,9 +21,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class new_post extends AppCompatActivity implements OnMapReadyCallback {
-    String title, location, condition;
+    String title, category;
+    EditText location;
     BottomNavigationView bottomNavigationView;
-
+    PostDatabaseHelper postDB;
+// TODO this code is spaghetti. needs to be organized
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //boilerplate
@@ -38,23 +40,25 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
         Spinner mySpinner = findViewById(R.id.new_item_category);
         mySpinner.setAdapter(adapter);
         title = findViewById(R.id.new_item_title).toString();
-        location = findViewById(R.id.new_item_loc).toString();
+        location = findViewById(R.id.new_item_loc);
+        postDB = new PostDatabaseHelper(this);
 
 
         //TODO: implement a map view with a default location of the user's current location
         MapView mapView = findViewById(R.id.mapView);
         mapView.getMapAsync(this);
 
-        // Item Category Selector todo: refactor to reflect this
+
         mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                condition = parent.getItemAtPosition(position).toString();
+                category = parent.getItemAtPosition(position).toString();
                 // Handle the selected item
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                category = parent.getItemAtPosition(0).toString();
                 // Another interface callback
             }
         });
@@ -82,6 +86,34 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
             return false;
         });
 
+
+        Button buttonCreatePost = findViewById(R.id.buttonCreatePost);
+        buttonCreatePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // TODO make better implementation of default
+                String itemLocation = "user_loc";
+                if (!location.toString().isEmpty()) itemLocation = location.toString();
+
+                // TODO create and implement missing fields
+                postDB.addPost("default_user",
+                        title,
+                        itemLocation,
+                        category,
+                        "default_img_path");
+
+                Toast.makeText(
+                        new_post.this,
+                        "Post created successfully",
+                        Toast.LENGTH_SHORT)
+                        .show();
+
+                openMainScreen();
+
+            }
+        });
+
     }
 
     @Override
@@ -90,5 +122,10 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
         LatLng loc = new LatLng(43.072, 89.4098);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
 
+    }
+
+    public void openMainScreen() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
