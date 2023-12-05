@@ -35,7 +35,7 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //gathering of
-        Spinner mySpinner = findViewById(R.id.new_item_cond);
+        Spinner mySpinner = findViewById(R.id.new_item_category);
         mySpinner.setAdapter(adapter);
         title = findViewById(R.id.new_item_title).toString();
         location = findViewById(R.id.new_item_loc).toString();

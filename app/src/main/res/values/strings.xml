@@ -2,6 +2,7 @@
 <resources>
     <string name="item_title">Item title</string>
     <string name="item_pick_up_location">Item pick up location</string>
+    <string name="post">Post</string>
     <string-array name="category_options">
         <item>All Categories</item>
         <item>Furniture</item>

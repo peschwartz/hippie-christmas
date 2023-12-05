@@ -29,15 +29,15 @@
         android:layout_marginTop="4dp"
         android:ems="10"
         android:inputType="text"
-        android:text="@string/item_pick_up_location"
+        android:hint="@string/item_pick_up_location"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/new_item_cond"
+        app:layout_constraintBottom_toTopOf="@+id/new_item_category"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mapView" />
 
     <Spinner
-        android:id="@+id/new_item_cond"
+        android:id="@+id/new_item_category"
         android:layout_width="310dp"
         android:layout_height="57dp"
         android:layout_marginStart="50dp"
@@ -45,7 +45,7 @@
         android:layout_marginEnd="51dp"
         android:layout_marginBottom="28dp"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/new_item_action"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCreatePost"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_item_loc" />
@@ -93,19 +93,19 @@
         app:layout_constraintTop_toBottomOf="@+id/new_item_title" />
 
     <Button
-        android:id="@+id/new_item_action"
+        android:id="@+id/buttonCreatePost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
         android:layout_marginTop="21dp"
         android:layout_marginEnd="160dp"
         android:layout_marginBottom="122dp"
-        android:text="Post"
+        android:text="@string/post"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_item_cond" />
+        app:layout_constraintTop_toBottomOf="@+id/new_item_category" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
