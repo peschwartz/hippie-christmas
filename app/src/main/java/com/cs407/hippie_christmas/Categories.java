@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -25,25 +26,32 @@ public class Categories extends AppCompatActivity {
         // initialize the "notes" class variable using readNotes in the DBHelper class. Use the username from SharedPreferences as a parameter
         // read categories from the db = dbHelper.readItems();
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.category_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //gathering of
+        Spinner mySpinner = findViewById(R.id.pick_category);
+        mySpinner.setAdapter(adapter);
         ArrayList<String> displayCategories = new ArrayList<>();
 
         for (Items items: itemList){
             displayCategories.add(items.getCategory());
         }
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayCategories);
-        ListView categoryListView = (ListView) findViewById(R.id.categoryList);
-        categoryListView.setAdapter(adapter);
+//        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayCategories);
+//        ListView categoryListView = (ListView) findViewById(R.id.categoryList);
+//        categoryListView.setAdapter(adapter);
 
         // do something for when a category is selected
-        categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), Results.class);
-                intent.putExtra("category", i);
-                startActivity(intent);
-            }
-        });
+//        categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent intent = new Intent(getApplicationContext(), Results.class);
+//                intent.putExtra("category", i);
+//                startActivity(intent);
+//            }
+//        });
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.categories);
