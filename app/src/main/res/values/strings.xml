@@ -2,10 +2,11 @@
 <resources>
     <string name="item_title">Item title</string>
     <string name="item_pick_up_location">Item pick up location</string>
-    <string-array name="new_item_cond_options">
-        <item>Like New</item>
-        <item>Good</item>
-        <item>Fair</item>
-        <item>Used</item>
+    <string-array name="category_options">
+        <item>All Categories</item>
+        <item>Furniture</item>
+        <item>Cooking</item>
+        <item>Appliances</item>
+        <item>Other</item>
     </string-array>
 </resources>

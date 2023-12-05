@@ -24,7 +24,7 @@ public class new_post extends AppCompatActivity {
         setContentView(R.layout.activity_new_post);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.new_item_cond_options, android.R.layout.simple_spinner_item);
+                R.array.category_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //gathering of
