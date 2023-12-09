@@ -6,13 +6,13 @@ public class Items {
 
     private String category;
     private String title;
-    private String content;
+    private String location;
 
     public Items(String category, String title, String content) {
 
         this.category = category;
         this.title = title;
-        this.content = content;
+        this.location = location;
     }
 
     public String getCategory() {
@@ -21,7 +21,7 @@ public class Items {
     public String getTitle() {
         return title;
     }
-    public String getContent() {
-        return content;
+    public String getLocation() {
+        return location;
     }
 }

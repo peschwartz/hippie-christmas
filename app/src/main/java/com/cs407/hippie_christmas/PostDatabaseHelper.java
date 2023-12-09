@@ -1,8 +1,11 @@
 package com.cs407.hippie_christmas;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 public class PostDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "PostDatabase";
@@ -14,7 +17,7 @@ public class PostDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_LOCATION = "location";
     private static final String COLUMN_CATEGORY = "category";
     private static final String COLUMN_IMAGE_PATH = "image_path";
-
+    static SQLiteDatabase sqLiteDatabase;
     public PostDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -51,10 +54,33 @@ public class PostDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    /*public ArrayList<String[]> getUserPosts(String username) {
-        if (DatabaseHelper.checkUserExists(username)) {
-            return
+    public ArrayList<Items> readPosts() {
+        if (sqLiteDatabase == null) {
+            sqLiteDatabase = this.getReadableDatabase();
         }
-        return null;
-    }*/
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_POSTS, null);
+
+        int titleIndex = c.getColumnIndex(COLUMN_TITLE);
+        int locationIndex = c.getColumnIndex(COLUMN_LOCATION);
+        int categoryIndex = c.getColumnIndex(COLUMN_CATEGORY);
+
+        ArrayList<Items> itemList = new ArrayList<>();
+
+        if (c.moveToFirst()) {
+            do {
+                String title = c.getString(titleIndex);
+                String location = c.getString(locationIndex);
+                String category = c.getString(categoryIndex);
+
+                Items item = new Items(title, location, category);
+                itemList.add(item);
+            } while (c.moveToNext());
+        }
+
+        c.close();
+        db.close();
+
+        return itemList;
+    }
 }

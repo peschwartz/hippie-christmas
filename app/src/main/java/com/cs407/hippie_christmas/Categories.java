@@ -17,41 +17,46 @@ import java.util.ArrayList;
 public class Categories extends AppCompatActivity {
     ArrayList<Items> itemList = new ArrayList<>();
     BottomNavigationView bottomNavigationView;
+    PostDatabaseHelper postDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
 
-        // list all of the different categories to choose from
-        // initialize the "notes" class variable using readNotes in the DBHelper class. Use the username from SharedPreferences as a parameter
-        // read categories from the db = dbHelper.readItems();
-
+       itemList = new ArrayList<>();
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.category_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        //gathering of
+
         Spinner mySpinner = findViewById(R.id.pick_category);
         mySpinner.setAdapter(adapter);
+
         ArrayList<String> displayCategories = new ArrayList<>();
 
-        for (Items items: itemList){
-            displayCategories.add(items.getCategory());
-        }
+        postDB = new PostDatabaseHelper(this);
 
-//        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayCategories);
-//        ListView categoryListView = (ListView) findViewById(R.id.categoryList);
-//        categoryListView.setAdapter(adapter);
+
+        // Call the readPosts method to get a list of items
+        itemList = postDB.readPosts();
+        // Display the categories on the screen
+        for (Items items : itemList) {
+            displayCategories.add(items.getTitle().toString());
+        }
+        ArrayAdapter adapter1 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayCategories);
+        ListView categoryListView = (ListView) findViewById(R.id.categoryList);
+        categoryListView.setAdapter(adapter1);
 
         // do something for when a category is selected
-//        categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 //                Intent intent = new Intent(getApplicationContext(), Results.class);
 //                intent.putExtra("category", i);
 //                startActivity(intent);
-//            }
-//        });
+            }
+        });
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.categories);

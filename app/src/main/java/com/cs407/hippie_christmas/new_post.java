@@ -21,8 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class new_post extends AppCompatActivity implements OnMapReadyCallback {
-    String title, category;
+    private String category;
     EditText location;
+    EditText title;
     BottomNavigationView bottomNavigationView;
     PostDatabaseHelper postDB;
 // TODO this code is spaghetti. needs to be organized
@@ -36,10 +37,10 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
                 R.array.category_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        //gathering of
         Spinner mySpinner = findViewById(R.id.new_item_category);
         mySpinner.setAdapter(adapter);
-        title = findViewById(R.id.new_item_title).toString();
+
+        title = findViewById(R.id.new_item_title);
         location = findViewById(R.id.new_item_loc);
         postDB = new PostDatabaseHelper(this);
 
@@ -92,13 +93,16 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
 
-                // TODO make better implementation of default
-                String itemLocation = "user_loc";
-                if (!location.toString().isEmpty()) itemLocation = location.toString();
+                String itemLocation = location.getText().toString();
+                String itemTitle = title.getText().toString();
+
+                if (itemLocation.isEmpty()) {
+                    itemLocation = "user_loc";
+                }
 
                 // TODO create and implement missing fields
                 postDB.addPost("default_user",
-                        title,
+                        itemTitle,
                         itemLocation,
                         category,
                         "default_img_path");
@@ -108,7 +112,6 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
                         "Post created successfully",
                         Toast.LENGTH_SHORT)
                         .show();
-
                 openMainScreen();
 
             }
@@ -125,7 +128,7 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     public void openMainScreen() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, home_page.class);
         startActivity(intent);
     }
 }
