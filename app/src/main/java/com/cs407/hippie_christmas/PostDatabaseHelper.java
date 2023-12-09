@@ -73,7 +73,7 @@ public class PostDatabaseHelper extends SQLiteOpenHelper {
                 String location = c.getString(locationIndex);
                 String category = c.getString(categoryIndex);
 
-                Items item = new Items(title, location, category);
+                Items item = new Items(category, title, location);
                 itemList.add(item);
             } while (c.moveToNext());
         }
@@ -81,6 +81,35 @@ public class PostDatabaseHelper extends SQLiteOpenHelper {
         c.close();
         db.close();
 
+        return itemList;
+    }
+
+    public ArrayList<Items> readPostsByCategory(String category) {
+        if (sqLiteDatabase == null) {
+            sqLiteDatabase = this.getReadableDatabase();
+        }
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_POSTS + " WHERE " + COLUMN_CATEGORY + " = ?", new String[]{category});
+
+        int titleIndex = c.getColumnIndex(COLUMN_TITLE);
+        int locationIndex = c.getColumnIndex(COLUMN_LOCATION);
+        int categoryIndex = c.getColumnIndex(COLUMN_CATEGORY);
+
+        ArrayList<Items> itemList = new ArrayList<>();
+
+        if (c.moveToFirst()) {
+            do {
+                String title = c.getString(titleIndex);
+                String location = c.getString(locationIndex);
+                String category1 = c.getString(categoryIndex);
+
+                Items item = new Items(category1, title, location);
+                itemList.add(item);
+            } while (c.moveToNext());
+        }
+
+        c.close();
+        db.close();
         return itemList;
     }
 }

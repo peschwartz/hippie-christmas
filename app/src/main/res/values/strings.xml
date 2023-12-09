@@ -4,7 +4,7 @@
     <string name="item_pick_up_location">Item pick up location</string>
     <string name="post">Post</string>
     <string-array name="category_options">
-        <item>All Categories</item>
+        <item>No Category</item>
         <item>Furniture</item>
         <item>Cooking</item>
         <item>Appliances</item>

@@ -8,7 +8,7 @@ public class Items {
     private String title;
     private String location;
 
-    public Items(String category, String title, String content) {
+    public Items(String category, String title, String location) {
 
         this.category = category;
         this.title = title;

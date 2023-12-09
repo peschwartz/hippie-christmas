@@ -29,7 +29,6 @@ public class Categories extends AppCompatActivity {
                 R.array.category_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-
         Spinner mySpinner = findViewById(R.id.pick_category);
         mySpinner.setAdapter(adapter);
 
@@ -37,15 +36,34 @@ public class Categories extends AppCompatActivity {
 
         postDB = new PostDatabaseHelper(this);
 
-
         // Call the readPosts method to get a list of items
         itemList = postDB.readPosts();
-        // Display the categories on the screen
-        for (Items items : itemList) {
-            displayCategories.add(items.getTitle().toString());
-        }
+        updateListView(displayCategories);
+
+        //Listener for the spinner
+        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCategory = parent.getItemAtPosition(position).toString();
+                if ("No Category".equals(selectedCategory)) {
+                    itemList = postDB.readPosts();
+                } else {
+                    itemList = postDB.readPostsByCategory(selectedCategory);
+                }
+                updateListView(displayCategories);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                itemList = postDB.readPosts();
+                updateListView(displayCategories);
+            }
+
+        });
+
+
         ArrayAdapter adapter1 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayCategories);
-        ListView categoryListView = (ListView) findViewById(R.id.categoryList);
+           ListView categoryListView = (ListView) findViewById(R.id.categoryList);
         categoryListView.setAdapter(adapter1);
 
         // do something for when a category is selected
@@ -78,5 +96,15 @@ public class Categories extends AppCompatActivity {
 
             return false;
         });
+    }
+
+    private void updateListView(ArrayList<String> displayCategories) {
+        displayCategories.clear();
+        for (Items items : itemList) {
+            displayCategories.add(items.getTitle().toString());
+        }
+        ArrayAdapter adapter1 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayCategories);
+        ListView categoryListView = (ListView) findViewById(R.id.categoryList);
+        categoryListView.setAdapter(adapter1);
     }
 }
