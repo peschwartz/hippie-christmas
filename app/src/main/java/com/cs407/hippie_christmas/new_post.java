@@ -128,7 +128,7 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     public void openMainScreen() {
-        Intent intent = new Intent(this, home_page.class);
+        Intent intent = new Intent(this, Categories.class);
         startActivity(intent);
     }
 }

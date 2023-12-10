@@ -1,6 +1,8 @@
 package com.cs407.hippie_christmas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.widget.Spinner;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Categories extends AppCompatActivity {
@@ -24,7 +27,6 @@ public class Categories extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
 
-       itemList = new ArrayList<>();
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.category_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -50,12 +52,14 @@ public class Categories extends AppCompatActivity {
                 } else {
                     itemList = postDB.readPostsByCategory(selectedCategory);
                 }
+                updateListItems(itemList, displayCategories);
                 updateListView(displayCategories);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 itemList = postDB.readPosts();
+                updateListItems(itemList, displayCategories);
                 updateListView(displayCategories);
             }
 
@@ -66,13 +70,37 @@ public class Categories extends AppCompatActivity {
            ListView categoryListView = (ListView) findViewById(R.id.categoryList);
         categoryListView.setAdapter(adapter1);
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
         // do something for when a category is selected
         categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent = new Intent(getApplicationContext(), Results.class);
-//                intent.putExtra("category", i);
-//                startActivity(intent);
+                String selectedTitle = displayCategories.get(i);
+
+                Items selectedItem = findItemByTitle(selectedTitle);
+
+                if(selectedItem != null) {
+                    String title = selectedItem.getTitle();
+                    String location = selectedItem.getLocation();
+                    String category = selectedItem.getCategory();
+
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                    fragmentTransaction.replace(R.id.fragmentContainer, ItemFragment.newInstance(title, location, category));
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+
+            }
+
+            private Items findItemByTitle(String title) {
+                for (Items item: itemList) {
+                    if (item.getTitle().equals(title)) {
+                        return item;
+                    }
+                }
+                return null;
             }
         });
 
@@ -99,12 +127,17 @@ public class Categories extends AppCompatActivity {
     }
 
     private void updateListView(ArrayList<String> displayCategories) {
-        displayCategories.clear();
-        for (Items items : itemList) {
-            displayCategories.add(items.getTitle().toString());
-        }
         ArrayAdapter adapter1 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayCategories);
         ListView categoryListView = (ListView) findViewById(R.id.categoryList);
         categoryListView.setAdapter(adapter1);
+    }
+
+    private void updateListItems(ArrayList<Items> itemList, ArrayList<String> displayCategories) {
+        displayCategories.clear();
+        itemList.clear();
+        itemList.addAll(postDB.readPosts());
+        for (Items items : itemList) {
+            displayCategories.add(items.getTitle().toString());
+        }
     }
 }
