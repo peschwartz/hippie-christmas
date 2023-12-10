@@ -42,6 +42,7 @@ public class Categories extends AppCompatActivity {
         itemList = postDB.readPosts();
         updateListView(displayCategories);
 
+
         //Listener for the spinner
         mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
