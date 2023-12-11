@@ -19,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -114,7 +115,19 @@ public class home_page extends AppCompatActivity implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        LatLng lat = new LatLng(43.0722, 89.4008);
-        mMap.moveCamera (CameraUpdateFactory.newLatLng(lat));
+        for (Items item: itemList) {
+            String curr_location = item.getLocation();
+            String[] location = item.getLocation().split(",");
+
+            double latitude = Double.parseDouble(location[0]);
+            double longitude = Double.parseDouble(location[1]);
+
+            LatLng latlng = new LatLng(latitude, longitude);
+            googleMap.addMarker(new MarkerOptions()
+                    .position(latlng)
+                    .title(item.getTitle()));
+        }
+
+
     }
 }

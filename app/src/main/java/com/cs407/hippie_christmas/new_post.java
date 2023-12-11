@@ -1,6 +1,9 @@
 package com.cs407.hippie_christmas;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,7 +15,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -20,12 +26,19 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class new_post extends AppCompatActivity implements OnMapReadyCallback {
     private String category;
     EditText location;
     EditText title;
     BottomNavigationView bottomNavigationView;
     PostDatabaseHelper postDB;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 12;
+
+    String locationString = "0,0";
+
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 // TODO this code is spaghetti. needs to be organized
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +56,9 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
         title = findViewById(R.id.new_item_title);
         location = findViewById(R.id.new_item_loc);
         postDB = new PostDatabaseHelper(this);
+
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
 
 
         //TODO: implement a map view with a default location of the user's current location
@@ -89,12 +105,15 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
 
 
         Button buttonCreatePost = findViewById(R.id.buttonCreatePost);
+
         buttonCreatePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String itemLocation = location.getText().toString();
+                getUserLocation();
+                String itemLocation = locationString;
                 String itemTitle = title.getText().toString();
+
 
                 if (itemLocation.isEmpty()) {
                     itemLocation = "user_loc";
@@ -131,4 +150,28 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
         Intent intent = new Intent(this, Categories.class);
         startActivity(intent);
     }
+
+    private void getUserLocation(){
+//        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        int permission = ActivityCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permission == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+        else {
+            mFusedLocationProviderClient.getLastLocation()
+                    .addOnCompleteListener(  this, task -> {
+                        Location mLastKnownLocation = task.getResult();
+                        if (task.isSuccessful() && mLastKnownLocation != null) {
+                            String latitude = Location.convert(mLastKnownLocation.getLatitude(), Location.FORMAT_SECONDS);
+                            String longitude = Location.convert(mLastKnownLocation.getLongitude(), Location.FORMAT_SECONDS);
+                            locationString = latitude + ","+longitude;
+                        }
+                    });
+
+        }
+    }
+
+
 }
