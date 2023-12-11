@@ -53,14 +53,12 @@ public class Categories extends AppCompatActivity {
                 } else {
                     itemList = postDB.readPostsByCategory(selectedCategory);
                 }
-                updateListItems(itemList, displayCategories);
                 updateListView(displayCategories);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 itemList = postDB.readPosts();
-                updateListItems(itemList, displayCategories);
                 updateListView(displayCategories);
             }
 
@@ -128,17 +126,13 @@ public class Categories extends AppCompatActivity {
     }
 
     private void updateListView(ArrayList<String> displayCategories) {
+        displayCategories.clear();
+        for (Items items : itemList) {
+            displayCategories.add(items.getTitle().toString());
+        }
         ArrayAdapter adapter1 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayCategories);
         ListView categoryListView = (ListView) findViewById(R.id.categoryList);
         categoryListView.setAdapter(adapter1);
     }
 
-    private void updateListItems(ArrayList<Items> itemList, ArrayList<String> displayCategories) {
-        displayCategories.clear();
-        itemList.clear();
-        itemList.addAll(postDB.readPosts());
-        for (Items items : itemList) {
-            displayCategories.add(items.getTitle().toString());
-        }
-    }
 }
