@@ -86,10 +86,10 @@ public class ItemFragment extends Fragment {
             String category = args.getString("category", "");
             String image = args.getString("imageUri", "");
 
+            itemImageView.setImageURI(Uri.parse(image));
             titleTextView.setText(title);
             locationTextView.setText(location);
             categoryTextView.setText(category);
-            itemImageView.setImageURI(Uri.parse(image));
         }
         // Inflate the layout for this fragment
         return view;

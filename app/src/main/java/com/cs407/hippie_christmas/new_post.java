@@ -51,8 +51,6 @@ public class new_post extends AppCompatActivity {
     //private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 12;
     private ActivityResultLauncher<String> mGetContent;
 
-    String locationString = "0,0";
-
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
     @Override
@@ -152,7 +150,7 @@ public class new_post extends AppCompatActivity {
             public void onClick(View v) {
 
                 //getUserLocation();
-                String itemLocation = locationString;
+                String itemLocation = location.getText().toString();
                 String itemTitle = title.getText().toString();
 
 
