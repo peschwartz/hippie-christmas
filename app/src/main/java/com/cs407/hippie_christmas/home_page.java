@@ -1,17 +1,24 @@
 package com.cs407.hippie_christmas;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,7 +31,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
-public class home_page extends AppCompatActivity implements OnMapReadyCallback {
+//public class home_page extends AppCompatActivity implements OnMapReadyCallback {
+public class home_page extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     private GoogleMap mMap;
@@ -33,13 +41,15 @@ public class home_page extends AppCompatActivity implements OnMapReadyCallback {
     private ListView listView;
     private ArrayAdapter<Items> adapter;
 
+    private ActivityResultLauncher<String> mGetContent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
-        mapFragment.getMapAsync(this);
+        //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
+        //mapFragment.getMapAsync(this);
 
 
         listView = findViewById(androidx.appcompat.R.id.scrollView);
@@ -70,10 +80,11 @@ public class home_page extends AppCompatActivity implements OnMapReadyCallback {
                     String title = selectedItem.getTitle();
                     String location = selectedItem.getLocation();
                     String category = selectedItem.getCategory();
+                    String imageUri = selectedItem.getImageUri();
 
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                    fragmentTransaction.replace(R.id.fragmentContainer, ItemFragment.newInstance(title, location, category));
+                    fragmentTransaction.replace(R.id.fragmentContainer, ItemFragment.newInstance(title, location, category, imageUri));
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
@@ -111,6 +122,12 @@ public class home_page extends AppCompatActivity implements OnMapReadyCallback {
         });
     }
 
+
+
+
+
+    /*
+    // This is part of the mapView functionality we will implement in the future
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
@@ -130,4 +147,6 @@ public class home_page extends AppCompatActivity implements OnMapReadyCallback {
 
 
     }
+
+     */
 }

@@ -83,10 +83,11 @@ public class Categories extends AppCompatActivity {
                     String title = selectedItem.getTitle();
                     String location = selectedItem.getLocation();
                     String category = selectedItem.getCategory();
+                    String image_uri = selectedItem.getImageUri();
 
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                    fragmentTransaction.replace(R.id.fragmentContainer, ItemFragment.newInstance(title, location, category));
+                    fragmentTransaction.replace(R.id.fragmentContainer, ItemFragment.newInstance(title, location, category, image_uri));
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }

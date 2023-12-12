@@ -75,7 +75,7 @@ public class PostDatabaseHelper extends SQLiteOpenHelper {
                 String location = c.getString(locationIndex);
                 String category = c.getString(categoryIndex);
 
-                Items item = new Items(category, title, location);
+                Items item = new Items(category, title, location, "savedImageUri_" + title);
                 itemList.add(item);
             } while (c.moveToNext());
         }
@@ -106,7 +106,8 @@ public class PostDatabaseHelper extends SQLiteOpenHelper {
                 String location = c.getString(locationIndex);
                 String category1 = c.getString(categoryIndex);
 
-                Items item = new Items(category1, title, location);
+
+                Items item = new Items(category1, title, location, "savedImageUri_" + title);
                 itemList.add(item);
             } while (c.moveToNext());
         }

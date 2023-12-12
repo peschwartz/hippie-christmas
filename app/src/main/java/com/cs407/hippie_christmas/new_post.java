@@ -1,45 +1,60 @@
 package com.cs407.hippie_christmas;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+
+/* mapView functionality scrapped until further notice
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+ */
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class new_post extends AppCompatActivity implements OnMapReadyCallback {
+
+
+//public class new_post extends AppCompatActivity implements OnMapReadyCallback {
+public class new_post extends AppCompatActivity {
     private String category;
     EditText location;
     EditText title;
     BottomNavigationView bottomNavigationView;
     PostDatabaseHelper postDB;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 12;
+    //private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 12;
+    private ActivityResultLauncher<String> mGetContent;
 
     String locationString = "0,0";
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
-// TODO this code is spaghetti. needs to be organized
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //boilerplate
@@ -57,13 +72,39 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
         location = findViewById(R.id.new_item_loc);
         postDB = new PostDatabaseHelper(this);
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        // Future mapView goal
+        //mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+
+        //handling image
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+
+                    @Override
+                    public void onActivityResult(Uri uri) {
+                        if (uri != null) {
+                            ImageView imageView = findViewById(R.id.item_image_frame);
+                            imageView.setImageURI(uri);
+                            saveImageUri(title.toString(), uri);
+
+                        }
+                    }
+                });
+
+        ImageView imageView = findViewById(R.id.item_image_frame);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch gallery; select image
+                mGetContent.launch("image/*");
+            }
+        });
 
 
 
-        //TODO: implement a map view with a default location of the user's current location
-        MapView mapView = findViewById(R.id.mapView);
-        mapView.getMapAsync(this);
+        //[scrapped for now]: implement a map view with a default location of the user's current location
+        //MapView mapView = findViewById(R.id.mapView);
+        //mapView.getMapAsync(this);
 
 
         mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -86,7 +127,7 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
         bottomNavigationView.setSelectedItemId(R.id.post);
         bottomNavigationView.setOnItemSelectedListener((item) -> {
             int id = item.getItemId();
-            if(id == R.id.home){
+            if (id == R.id.home) {
                 Intent intent1 = new Intent(new_post.this, home_page.class);
                 startActivity(intent1);
                 return true;
@@ -94,7 +135,7 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
                 Intent intent2 = new Intent(new_post.this, Categories.class);
                 startActivity(intent2);
                 return true;
-            } else if (id == R.id.post){
+            } else if (id == R.id.post) {
                 Intent intent3 = new Intent(new_post.this, new_post.class);
                 startActivity(intent3);
                 return true;
@@ -110,7 +151,7 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
 
-                getUserLocation();
+                //getUserLocation();
                 String itemLocation = locationString;
                 String itemTitle = title.getText().toString();
 
@@ -119,18 +160,18 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
                     itemLocation = "user_loc";
                 }
 
-                // TODO create and implement missing fields
+                //
                 postDB.addPost("default_user",
-                        itemTitle,
-                        itemLocation,
-                        category,
-                        "default_img_path");
+                                        itemTitle,
+                                        itemLocation,
+                                        category,
+                             "default_img_path");
 
-                Toast.makeText(
-                        new_post.this,
-                        "Post created successfully",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(new_post.this,
+                                "Post created successfully",
+                                Toast.LENGTH_SHORT)
+                                .show();
+
                 openMainScreen();
 
             }
@@ -138,19 +179,36 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
 
     }
 
+    /*
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
         LatLng loc = new LatLng(43.072, 89.4098);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
 
-    }
+    } */
 
     public void openMainScreen() {
         Intent intent = new Intent(this, Categories.class);
         startActivity(intent);
     }
 
+    private void saveImageUri(String postID, Uri imageUri) {
+        SharedPreferences sharedPref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("android.resource://savedImageUri_" + postID, imageUri.toString());
+        editor.apply();
+    }
+
+    private Uri loadImageUri() {
+        SharedPreferences sharedPref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        return Uri.parse(sharedPref.getString("savedImageUri", null));
+    }
+
+
+
+
+    /*
     private void getUserLocation(){
 //        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         int permission = ActivityCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
@@ -171,7 +229,12 @@ public class new_post extends AppCompatActivity implements OnMapReadyCallback {
                     });
 
         }
+
+
+
     }
+
+    */
 
 
 }

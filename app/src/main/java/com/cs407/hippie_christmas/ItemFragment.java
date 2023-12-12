@@ -1,5 +1,7 @@
 package com.cs407.hippie_christmas;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,8 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.content.SharedPreferences;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,12 +47,13 @@ public class ItemFragment extends Fragment {
      * @return A new instance of fragment ItemFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ItemFragment newInstance(String title, String location, String category) {
+    public static ItemFragment newInstance(String title, String location, String category, String image_uri) {
         ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
         args.putString("location", location);
         args.putString("category", category);
+        args.putString("imageUri", image_uri);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,6 +74,7 @@ public class ItemFragment extends Fragment {
         Log.d("ItemFragment", "onCreateView");
         View view = inflater.inflate(R.layout.fragment_item, container, false);
 
+        ImageView itemImageView = view.findViewById(R.id.item_image_view);
         TextView titleTextView = view.findViewById(R.id.titleTextView);
         TextView locationTextView = view.findViewById(R.id.locationTextView);
         TextView categoryTextView = view.findViewById(R.id.categoryTextView);
@@ -78,14 +84,24 @@ public class ItemFragment extends Fragment {
             String title = args.getString("title", "");
             String location = args.getString("location", "");
             String category = args.getString("category", "");
+            String image = args.getString("imageUri", "");
 
             titleTextView.setText(title);
             locationTextView.setText(location);
             categoryTextView.setText(category);
+            itemImageView.setImageURI(Uri.parse(image));
         }
         // Inflate the layout for this fragment
         return view;
     }
+
+    /*
+    private Uri loadImageUri() {
+        SharedPreferences sharedPref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        return Uri.parse(sharedPref.getString("savedImageUri", null));
+    }
+
+     */
 
 
 
